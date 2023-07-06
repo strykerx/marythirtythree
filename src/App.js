@@ -22,7 +22,7 @@ function App() {
   const [redirectToThanks, setRedirectToThanks] = useState(false);
   const [webcamActive, setWebcamActive] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
-
+  const [uploaded, setUploaded] = useState(false);
   
 
   useEffect(() => {
@@ -105,7 +105,8 @@ function App() {
     alert('Video uploaded and data saved!');
     setLoading(false);
     setIsFullscreen(false);
-    setRedirectToThanks(true);
+    setUploaded(true);
+    //setRedirectToThanks(true);
   };
   
 
@@ -125,7 +126,7 @@ function App() {
           path="/"
           element={
             <>
-              
+              {uploaded && <Navigate to="/thanks" replace />}
               <div className="App">
                 <h1>33 seconds for Mary's 33rd!</h1>
                 <div className="explanation">
