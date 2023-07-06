@@ -7,6 +7,7 @@ import { collection, addDoc } from 'firebase/firestore';
 import './App.css'; // Import the CSS file
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import MaryPage from './MaryPage';
+import ThanksPage from './ThanksPage';
 
 
 function App() {
@@ -179,25 +180,32 @@ function App() {
                       <video src={URL.createObjectURL(recordedBlob)} controls />
                       {!webcamActive && (
                         <div className="controls overlay">
-                          <button
-                            onClick={() => setRecordedBlob(null)}
-                            className="button re-record-btn"
-                          >
-                            Re-record
-                          </button>
-                          {recordedChunks.length > 0 && (
-                            <button
-                              onClick={handleUpload}
-                              disabled={!name}
-                              className="button upload-btn"
-                            >
-                              Upload Video
-                            </button>
+                          {loading ? (
+                            <div className="loading-icon">Uploading...</div>
+                          ) : (
+                            <>
+                              <button
+                                onClick={() => setRecordedBlob(null)}
+                                className="button re-record-btn"
+                              >
+                                Re-record
+                              </button>
+                              {recordedChunks.length > 0 && (
+                                <button
+                                  onClick={handleUpload}
+                                  disabled={!name}
+                                  className="button upload-btn"
+                                >
+                                  Upload Video
+                                </button>
+                              )}
+                            </>
                           )}
                         </div>
                       )}
                     </>
                   )}
+
 
                   {!webcamActive && !recordedBlob && (
                     <button
@@ -216,26 +224,7 @@ function App() {
             </>
           }
         />
-        <Route
-          path="/thanks"
-          element={
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "100vh",
-                flexDirection: "column",
-                backgroundColor: "#f0f0f0",
-                textAlign: "center",
-              }}
-            >
-              <h1 style={{ color: "#333", maxWidth: "80%" }}>
-                🥳Thanks for sending a video for Mary's Birthday!🎂
-              </h1>
-            </div>
-          }
-        />
+        <Route path="/thanks" element={<ThanksPage />} />
       </Routes>
     </Router>
   );

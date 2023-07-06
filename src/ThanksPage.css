@@ -1,0 +1,15 @@
+/* ThanksPage.css */
+.thanks-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+  background-color: #f0f0f0;
+  text-align: center;
+}
+
+.thanks-page-title {
+  color: #333;
+  max-width: 80%;
+}

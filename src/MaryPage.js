@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { doc, getDocs, collection } from 'firebase/firestore';
+import { doc, getDocs, collection, addDoc } from 'firebase/firestore';
 import { db } from './firebase';
 import VideoComponent from './VideoComponent';
 

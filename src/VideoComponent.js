@@ -27,7 +27,7 @@ const VideoComponent = ({ name, url }) => {
   return (
     <div className='play'>
       <h1>{name}</h1>
-      <video ref={videoRef} controls muted={muted}>
+      <video className="video" ref={videoRef} controls muted={muted}>
         <source src={url} type="video/webm" />
         Your browser does not support the video tag.
       </video>
