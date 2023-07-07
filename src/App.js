@@ -23,6 +23,8 @@ function App() {
   const [webcamActive, setWebcamActive] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [uploaded, setUploaded] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
   
 
   useEffect(() => {
@@ -94,6 +96,39 @@ function App() {
     setCapturing(false);
     setWebcamActive(false);
     //setIsFullscreen(false);
+  };
+  
+  const handleFileUpload = (e) => {
+    setUploading(true);
+    const file = e.target.files[0];
+    if (file) {
+      const videoElement = document.createElement('video');
+      videoElement.src = URL.createObjectURL(file);
+      videoElement.addEventListener('loadedmetadata', async () => {
+        const duration = videoElement.duration;
+        if (duration < 27 || duration > 38) {
+          alert('The video must be 33 seconds long (+-5 seconds)');
+          setUploading(false);
+        } else {
+          // Same upload process as the handleUpload function
+          const uniqueId = uuidv4();
+          const fileRef = ref(storage, `videos/${uniqueId}`);
+          await uploadBytes(fileRef, file);
+          const videoURL = await getDownloadURL(fileRef);
+          await addDoc(collection(db, 'videos'), {
+            name,
+            url: videoURL,
+          });
+          alert('Video uploaded and data saved!');
+          setLoading(false);
+          setIsFullscreen(false);
+          setUploaded(true);
+          setUploading(false);
+        }
+      });
+    } else {
+      setUploading(false);
+    }
   };
   
 
@@ -225,7 +260,23 @@ function App() {
                     >
                       Start Capture
                     </button>
+                    
                   )}
+                  <br/>
+                  <label htmlFor="video-upload" className="button upload-video-btn">
+                    Upload your own video
+                  </label>
+                  <input
+                    id="video-upload"
+                    type="file"
+                    accept="video/*"
+                    onChange={handleFileUpload}
+                    disabled={!name || uploading}
+                    className="file-input"
+                  />
+                  {uploading && <p>Uploading...</p>}
+
+
                 </div>
 
                 {loading && <div>Loading...</div>}

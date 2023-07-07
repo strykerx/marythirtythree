@@ -126,6 +126,15 @@ p {
   }
 }
 
+.upload-video-btn {
+  background-color: #0000FF; /* Blue color */
+}
+
+.file-input {
+  display: none; /* Hide the default file input field */
+}
+
+
 
 
 .controls {
