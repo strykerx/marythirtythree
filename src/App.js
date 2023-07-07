@@ -29,7 +29,14 @@ function App() {
     let timerId;
     if (capturing) {
       timerId = setInterval(() => {
-        setCountdown((c) => c - 1);
+        setCountdown((c) => {
+          if (c <= 1) {
+            handleStopCapture(); // stop capture when countdown goes below 1
+            return 0; // make it stop at 0
+          } else {
+            return c - 1;
+          }
+        });
       }, 1000);
     } else {
       setCountdown(33);
@@ -40,6 +47,7 @@ function App() {
       }
     };
   }, [capturing]);
+  
 
   const handleStartCapture = () => {
     setCapturing(true);
@@ -168,6 +176,7 @@ function App() {
                         height: 768,
                         facingMode: "user",
                         echoCancellation: true,
+                        deviceId: "default",
                       }}
                       muted={true}
                       onUserMediaError={() =>
