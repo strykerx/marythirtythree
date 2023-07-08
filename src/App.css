@@ -93,6 +93,9 @@ p, ul {
   .camera-preview, .video {
     max-height: calc(100vh - 60px); 
   }
+  .explanation{
+    width: 90%;
+  }
 }
 
 .upload-video-btn {
