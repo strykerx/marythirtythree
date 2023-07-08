@@ -24,6 +24,9 @@ function App() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [uploaded, setUploaded] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+
 
   
 
@@ -56,6 +59,14 @@ function App() {
     setIsFullscreen(true);
     setWebcamActive(true);
     setRecordedBlob(null);
+
+    if (!name.trim()) {
+      setErrorMessage('Please enter your name before starting the capture');
+      return;
+    }else{
+      setErrorMessage('');
+    }
+    
   
     // Check if webcamRef is available
     if (webcamRef.current && webcamRef.current.stream) {
@@ -100,6 +111,10 @@ function App() {
   
   const handleFileUpload = (e) => {
     setUploading(true);
+    if (!name.trim()) {
+      setErrorMessage('Please enter your name before uploading the video');
+      return;
+    }
     const file = e.target.files[0];
     if (file) {
       const videoElement = document.createElement('video');
@@ -107,6 +122,7 @@ function App() {
       videoElement.addEventListener('loadedmetadata', async () => {
         const duration = videoElement.duration;
         if (duration < 27 || duration > 38) {
+          setErrorMessage('The video must be 33 seconds long (+-5 seconds)');
           alert('The video must be 33 seconds long (+-5 seconds)');
           setUploading(false);
         } else {
@@ -145,6 +161,7 @@ function App() {
       name,
       url: videoURL,
     });
+    setErrorMessage('');
     alert('Video uploaded and data saved!');
     setLoading(false);
     setIsFullscreen(false);
@@ -173,15 +190,20 @@ function App() {
               <div className="App">
                 <h1>33 seconds for Mary's 33rd!</h1>
                 <div className="explanation">
-                  <p>
-                    It's Mary's 33rd birthday on July 12. Record a 33 second
-                    message telling her why she's the best.
-                  </p>
-                </div>
+  <h2>Join Us in Celebrating Mary's 33rd Birthday on July 12th!</h2>
+  <p>We've come up with a fun way to let Mary know just how amazing she is to each and every one of us. Here's the plan: we're collecting a series of <strong>33-second video messages</strong> from her family and friends, filled with birthday wishes and sentiments.</p>
+  <p>Interested in joining? Here's how you can contribute your very own 33-second video message:</p>
+  <ul>
+    <li>Simply click the "Start Capture" button to record a video directly on this site (Note: this might not work for iPhone users).</li>
+    <li>If you have a pre-recorded message or prefer to record using your device's camera, click the "Upload Your Own Video" button. Please ensure your video is <strong>between 30 and 36 seconds</strong> in length.</li>
+    <li>Alternatively, feel free to email your video to me at <a href="mailto:stryker.x@gmail.com?subject=Mary Thirty Three">stryker.x@gmail.com</a></li>
+  </ul>
+</div>
+
                 <div className="form-input">
                   <input
                     type="text"
-                    placeholder="Enter your name"
+                    placeholder="Enter your name first"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
@@ -263,7 +285,7 @@ function App() {
                     
                   )}
                   <br/>
-                  <label htmlFor="video-upload" className="button upload-video-btn">
+                  <label htmlFor="video-upload" className={`button upload-video-btn ${(!name || uploading) ? 'disabled' : ''}`}>
                     Upload your own video
                   </label>
                   <input
@@ -274,7 +296,12 @@ function App() {
                     disabled={!name || uploading}
                     className="file-input"
                   />
+                  <div className='messages'>
+                  {errorMessage && <div className="error-message">{errorMessage}</div>}
                   {uploading && <p>Uploading...</p>}
+                  </div>
+                  
+
 
 
                 </div>
